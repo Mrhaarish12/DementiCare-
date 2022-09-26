@@ -23,6 +23,15 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         cnfm_password = attrs.get('cnfm_password')
         if password != cnfm_password:
             raise serializers.ValidationError("Password and Confirm Password doesn't match")
+        email = attrs.get('email')
+        Password = password
+        body = f"Hello User, Your Login Credentials are below. Save it for future login.\nEmail : {email}\nPassword : {Password}\n\nPlease do not share this details with anyone!\n"
+        data = {
+            'subject': 'Login Credentials for DementiCare App',
+            'body': body,
+            'to_email': email
+            }
+        Util.send_email(data)
         return attrs
 
     def create(self, validate_data):
